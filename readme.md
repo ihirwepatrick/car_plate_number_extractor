@@ -1,22 +1,30 @@
-# Playte Number Detection System Project - Car Number Plate Extraction System
+# ANPR Plate Reader (Rwanda-Focused)
 
-This project implements a simple Automatic Number Plate Recognition (ANPR) pipeline based on the required assignment flow:
+This repository contains a lightweight Automatic Number Plate Recognition (ANPR) pipeline built for real-time plate capture and logging.
 
-**Detection → Alignment → OCR → Validation → Temporal → Save**
+It follows this processing chain:
 
-## Features
-- Captures frames from a webcam
-- Detects a likely number plate region
-- Aligns the plate using perspective correction
-- Reads plate text using Tesseract OCR
-- Validates OCR output using plate patterns
-- Confirms plate text after multiple observations
-- Saves confirmed plates into `data/plates.csv`
+**Detect -> Align -> OCR -> Validate -> Temporal Confirm -> Save**
 
-## Project Structure
+## What Makes This Project Different
+- Designed around practical live-camera usage, not only static images.
+- Includes temporal confirmation to reduce one-frame OCR mistakes.
+- Stores both plate text and a captured crop for traceability.
+- Ships with plate validation patterns that fit common Rwanda-style formats.
+
+## Core Capabilities
+- Reads frames from a webcam stream.
+- Detects candidate plate regions.
+- Corrects plate perspective before OCR.
+- Extracts text via Tesseract OCR.
+- Filters noisy OCR output using regex validation.
+- Confirms a plate only after repeated observations.
+- Saves confirmed records to `data/plates.csv`.
+
+## Repository Layout
 ```text
-anpr-project/
-├── README.md
+anpr-project-main/
+├── readme.md
 ├── requirements.txt
 ├── src/
 │   ├── camera.py
@@ -34,23 +42,30 @@ anpr-project/
     ├── detection.png
     ├── alignment.png
     └── ocr.png
+```
 
-## Supported Plate Formats
-The system validates the OCR output against standard regional patterns using Regular Expressions. Currently supported formats in `src/validate.py` include:
-- `^[A-Z]{3}[0-9]{3}[A-Z]?$` (e.g., **RAB123A** or **RAB123**)
-- `^[A-Z]{2}[0-9]{3}[A-Z]{2}$` (e.g., **RA123BC**)
+## Supported Plate Patterns
+Validation logic in `src/validate.py` currently supports:
+- `^[A-Z]{3}[0-9]{3}[A-Z]?$` (example: `RAB123A` or `RAB123`)
+- `^[A-Z]{2}[0-9]{3}[A-Z]{2}$` (example: `RA123BC`)
 
-You can easily add new regional formats by appending to the `PLATE_PATTERNS` list in `src/validate.py`.
+To support additional regions or formats, extend `PLATE_PATTERNS` in `src/validate.py`.
 
-## Sample Screenshots
-Here is a visual breakdown of the ANPR pipeline in action:
+## Quick Start
+1. Install dependencies:
+   - `pip install -r requirements.txt`
+2. Run the pipeline:
+   - `python src/main.py`
+3. Check outputs:
+   - Plate logs: `data/plates.csv`
+   - Plate crops: `data/captures/`
 
-### 1. Plate Detection
+## Screenshots
+### Plate Detection
 ![Plate Detection](screenshots/detection.png)
 
-### 2. Plate Alignment (Captured Plate)
-*When a plate is successfully detected and temporally confirmed, its cropped image is automatically saved to the `data/captures/` directory (e.g., `data/captures/RAE327H.png`).*
+### Plate Alignment
 ![Aligned Plate](screenshots/alignment.png)
 
-### 3. OCR Image Pre-processing
-![OCR Process](screenshots/ocr.png)"# car_plate_number_extractor" 
+### OCR Pre-processing
+![OCR Process](screenshots/ocr.png)
