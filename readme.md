@@ -1,4 +1,4 @@
-# ANPR Project - Car Number Plate Extraction System
+# Playte Number Detection System Project - Car Number Plate Extraction System
 
 This project implements a simple Automatic Number Plate Recognition (ANPR) pipeline based on the required assignment flow:
 
